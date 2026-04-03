@@ -1,33 +1,25 @@
-# GitHub Pages — Actions deployment (no PAT).
+# GitHub Pages: build on main/master, push ./dist to branch `gh-pages`.
 #
-# CRITICAL — publishing source (if this is wrong, the live site will load /src/main.tsx
-# and 404 assets): Settings → Pages → Build and deployment → Source MUST be
-# "GitHub Actions". If it is still "Deploy from a branch" (e.g. gh-pages / root), GitHub
-# serves repo `index.html` (the Vite dev template), not `dist/` from this workflow.
+# Your site URL is a project page under /portfolio_landing_page/, so GitHub Pages must
+# serve the built bundle (hashed JS/CSS), not repo-root index.html.
 #
-# Architecture: integrate on `main` / `master`; **build + deploy run only from `gh-pages`**
-# (Environment deployment branch rules + OIDC ref).
-#
-# Ship: merge `main` → `gh-pages` (PR or fast-forward), or workflow_dispatch on `gh-pages`.
-#
-# One-time: `git checkout -b gh-pages main && git push -u origin gh-pages` if missing.
+# Settings → Pages → Source: Deploy from branch → Branch: gh-pages, folder: / (root).
+# (If Source is "GitHub Actions" instead, either switch to branch deploy as above or
+# remove the peaceiris step and use only upload-pages-artifact + deploy-pages — not both.)
 #
 # Site: https://oleksandr-tkach-dev.github.io/portfolio_landing_page/
-# Rename repo → update PAGES_BASE below.
 
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main, master, gh-pages]
+    branches: [main, master]
   pull_request:
-    branches: [main, master, gh-pages]
+    branches: [main, master]
   workflow_dispatch: {}
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
@@ -35,10 +27,9 @@ concurrency:
 
 env:
   PAGES_BASE: /portfolio_landing_page/
-  PUBLISH_BRANCH: gh-pages
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,22 +54,13 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Push dist to gh-pages branch
         if: >-
-          github.ref == format('refs/heads/{0}', env.PUBLISH_BRANCH) &&
-          (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'))
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: dist
-
-  deploy:
-    needs: build
-    if: >-
-      github.ref == format('refs/heads/{0}', env.PUBLISH_BRANCH) &&
-      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          force_orphan: true
