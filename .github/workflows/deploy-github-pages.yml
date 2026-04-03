@@ -1,13 +1,12 @@
-# GitHub Pages — official Actions deployment (no PAT, no push to gh-pages)
+# GitHub Pages — Actions deployment (no PAT).
 #
-# Docs: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
+# Architecture: source integration on `main` / `master`; **build + deploy run only from
+# `gh-pages`** (matches Environment → github-pages deployment branch rules + OIDC ref).
 #
-# REQUIRED one-time (or Pages will 404 / deploy will fail):
-#   Settings → Pages → Build and deployment → Source: "GitHub Actions"
-#   (NOT "Deploy from a branch". Branch-based deploy + PAT caused 403 when the token
-#   lacked Contents: Read and write on this repo or could not force-push gh-pages.)
+# Ship: merge `main` → `gh-pages` (PR or fast-forward), or workflow_dispatch on `gh-pages`.
 #
-# Optional: first run may ask you to approve the "github-pages" environment.
+# One-time: Settings → Pages → Source: GitHub Actions.
+# One-time: `git checkout -b gh-pages main && git push -u origin gh-pages` if missing.
 #
 # Site: https://oleksandr-tkach-dev.github.io/portfolio_landing_page/
 # Rename repo → update PAGES_BASE below.
@@ -16,7 +15,9 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, gh-pages]
+  pull_request:
+    branches: [main, master, gh-pages]
   workflow_dispatch: {}
 
 permissions:
@@ -30,6 +31,7 @@ concurrency:
 
 env:
   PAGES_BASE: /portfolio_landing_page/
+  PUBLISH_BRANCH: gh-pages
 
 jobs:
   build:
@@ -51,11 +53,17 @@ jobs:
           VITE_BASE_URL: ${{ env.PAGES_BASE }}
 
       - uses: actions/upload-pages-artifact@v3
+        if: >-
+          github.ref == format('refs/heads/{0}', env.PUBLISH_BRANCH) &&
+          (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         with:
           path: dist
 
   deploy:
     needs: build
+    if: >-
+      github.ref == format('refs/heads/{0}', env.PUBLISH_BRANCH) &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
