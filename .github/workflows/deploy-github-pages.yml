@@ -1,14 +1,15 @@
 # GitHub Pages — Actions deployment (no PAT).
 #
-# Architecture: source integration on `main` / `master`; **build + deploy run only from
-# `gh-pages`** (matches Environment → github-pages deployment branch rules + OIDC ref).
+# CRITICAL — publishing source (if this is wrong, the live site will load /src/main.tsx
+# and 404 assets): Settings → Pages → Build and deployment → Source MUST be
+# "GitHub Actions". If it is still "Deploy from a branch" (e.g. gh-pages / root), GitHub
+# serves repo `index.html` (the Vite dev template), not `dist/` from this workflow.
+#
+# Architecture: integrate on `main` / `master`; **build + deploy run only from `gh-pages`**
+# (Environment deployment branch rules + OIDC ref).
 #
 # Ship: merge `main` → `gh-pages` (PR or fast-forward), or workflow_dispatch on `gh-pages`.
 #
-# One-time: Settings → Pages → Build and deployment → Source: "GitHub Actions" ONLY.
-#   If Source is "Deploy from a branch" (e.g. gh-pages /), GitHub serves repo-root
-#   index.html with /src/main.tsx → 404. Actions artifact (dist/) is ignored until
-#   you switch the source to GitHub Actions.
 # One-time: `git checkout -b gh-pages main && git push -u origin gh-pages` if missing.
 #
 # Site: https://oleksandr-tkach-dev.github.io/portfolio_landing_page/
@@ -55,10 +56,10 @@ jobs:
         env:
           VITE_BASE_URL: ${{ env.PAGES_BASE }}
 
-      - name: Verify dist is a Vite build (not dev index.html)
+      - name: Verify dist is a Vite production bundle
         run: |
-          if grep -qE 'src/main\.(tsx|jsx|ts|js)' dist/index.html; then
-            echo "::error::dist/index.html still points at /src — Pages source is probably 'Deploy from branch' or build failed."
+          if grep -qF '/src/main.tsx' dist/index.html; then
+            echo '::error::dist/index.html still references /src/main.tsx (dev template).'
             exit 1
           fi
 
