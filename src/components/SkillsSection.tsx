@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Smartphone,
-  Gamepad2,
+  Cpu,
   Database,
   Code2,
   Globe,
@@ -47,9 +47,9 @@ const skills = [
     desc: "Git with CI on GitHub Actions or Codemagic, Fastlane for builds and signing, and PRs kept focused for review.",
   },
   {
-    icon: Gamepad2,
-    title: "Unity / C# (breadth)",
-    desc: "Prior Unity work with DI, reactive UI patterns, and content pipelines for interactive and gaming-adjacent products.",
+    icon: Cpu,
+    title: "Platform & native bridges",
+    desc: "MethodChannel and native hooks, background work (WorkManager, FCM), geolocation pipelines, and AOSP-facing Android customization when products sit below pure UI-level Flutter.",
   },
 ];
 
@@ -66,7 +66,6 @@ const techCategories: { title: string; items: string[] }[] = [
       "Provider",
       "Clean Architecture",
       "Get It",
-      "Injectable",
       "SOLID & Layering",
     ],
   },
@@ -96,7 +95,7 @@ const techCategories: { title: string; items: string[] }[] = [
   },
   {
     title: "Payments & platform channels",
-    items: ["Google Pay", "Apple Pay", "Platform channels", "MethodChannel / EventChannel"],
+    items: ["Google Pay", "Apple Pay", "Platform channels"],
   },
   {
     title: "Quality & testing",
@@ -111,8 +110,16 @@ const techCategories: { title: string; items: string[] }[] = [
     items: ["Swagger / OpenAPI", "Postman", "Contract-driven iteration"],
   },
   {
-    title: "Unity & C# (prior roles)",
-    items: ["Unity", "C#", "Zenject", "UniRx", "MVVM", "Addressables"],
+    title: "Android platform & native integration",
+    items: [
+      "AOSP",
+      "WorkManager",
+      "FCM",
+      "Geolocation",
+      "MethodChannel / EventChannel",
+      "iOS Shortcuts",
+      "Webhooks",
+    ],
   },
 ];
 
@@ -141,8 +148,9 @@ const SkillsSection = () => {
         >
           Most of my recent work is in <strong className="text-foreground font-medium">mobility and on-demand</strong>,{" "}
           <strong className="text-foreground font-medium">payments and integrations</strong>, and{" "}
-          <strong className="text-foreground font-medium">real-time client systems</strong>. I have also shipped Unity/C# work where
-          products overlap gaming and fintech.
+          <strong className="text-foreground font-medium">real-time client systems</strong>, and{" "}
+          <strong className="text-foreground font-medium">native bridges and Android platform work</strong> where the product needs
+          more than screen-level Flutter alone.
         </motion.p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
