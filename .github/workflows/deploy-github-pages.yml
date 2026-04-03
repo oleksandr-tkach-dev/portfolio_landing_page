@@ -64,7 +64,7 @@ jobs:
       - name: Publish to gh-pages (PAT required — GITHUB_TOKEN does not trigger Pages)
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_access_token: ${{ secrets.GH_PAGES_TOKEN }}
+          personal_token: ${{ secrets.GH_PAGES_TOKEN }}
           publish_dir: ./dist
           force_orphan: true
           enable_jekyll: false
