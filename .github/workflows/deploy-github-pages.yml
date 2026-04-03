@@ -1,19 +1,16 @@
-# GitHub Pages (publish from branch: gh-pages / root)
+# GitHub Pages — official Actions deployment (no PAT, no push to gh-pages)
 #
-# IMPORTANT (from GitHub docs — "Troubleshooting publishing from a branch"):
-# "Commits pushed by a GitHub Actions workflow that uses the GITHUB_TOKEN do not
-# trigger a GitHub Pages build."
-# So we push with a PAT so Pages actually deploys.
+# Docs: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
 #
-# One-time setup:
-# 1) Repo → Settings → Secrets and variables → Actions → New repository secret
-#    Name: GH_PAGES_TOKEN
-#    Value: fine-grained PAT with this repo only, permission "Contents: Read and write"
-#    (or a classic PAT with "repo" scope).
-# 2) Repo → Settings → Pages → Source: "Deploy from a branch" → Branch: gh-pages, / (root) → Save.
+# REQUIRED one-time (or Pages will 404 / deploy will fail):
+#   Settings → Pages → Build and deployment → Source: "GitHub Actions"
+#   (NOT "Deploy from a branch". Branch-based deploy + PAT caused 403 when the token
+#   lacked Contents: Read and write on this repo or could not force-push gh-pages.)
 #
-# Site URL: https://oleksandr-tkach-dev.github.io/portfolio_landing_page/
-# If you rename the repo, change PAGES_BASE below to /new-repo-name/
+# Optional: first run may ask you to approve the "github-pages" environment.
+#
+# Site: https://oleksandr-tkach-dev.github.io/portfolio_landing_page/
+# Rename repo → update PAGES_BASE below.
 
 name: Deploy to GitHub Pages
 
@@ -24,17 +21,18 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
-  # Must match the repo segment in https://<user>.github.io/<repo>/
   PAGES_BASE: /portfolio_landing_page/
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,29 +40,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build static site
         run: npm run build && node scripts/postbuild-gh-pages.mjs
         env:
           VITE_BASE_URL: ${{ env.PAGES_BASE }}
 
-      - name: Require GH_PAGES_TOKEN
-        env:
-          PAT: ${{ secrets.GH_PAGES_TOKEN }}
-        run: |
-          if [ -z "$PAT" ]; then
-            echo "::error::Add repository secret GH_PAGES_TOKEN (PAT with Contents: Read and write on this repo). GitHub does not deploy Pages when gh-pages is updated only with GITHUB_TOKEN. See comments at top of this workflow file."
-            exit 1
-          fi
-
-      - name: Publish to gh-pages (PAT required — GITHUB_TOKEN does not trigger Pages)
-        uses: peaceiris/actions-gh-pages@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
-          personal_token: ${{ secrets.GH_PAGES_TOKEN }}
-          publish_dir: ./dist
-          force_orphan: true
-          enable_jekyll: false
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
