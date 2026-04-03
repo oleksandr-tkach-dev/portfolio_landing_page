@@ -5,7 +5,10 @@
 #
 # Ship: merge `main` → `gh-pages` (PR or fast-forward), or workflow_dispatch on `gh-pages`.
 #
-# One-time: Settings → Pages → Source: GitHub Actions.
+# One-time: Settings → Pages → Build and deployment → Source: "GitHub Actions" ONLY.
+#   If Source is "Deploy from a branch" (e.g. gh-pages /), GitHub serves repo-root
+#   index.html with /src/main.tsx → 404. Actions artifact (dist/) is ignored until
+#   you switch the source to GitHub Actions.
 # One-time: `git checkout -b gh-pages main && git push -u origin gh-pages` if missing.
 #
 # Site: https://oleksandr-tkach-dev.github.io/portfolio_landing_page/
@@ -51,6 +54,13 @@ jobs:
         run: npm run build && node scripts/postbuild-gh-pages.mjs
         env:
           VITE_BASE_URL: ${{ env.PAGES_BASE }}
+
+      - name: Verify dist is a Vite build (not dev index.html)
+        run: |
+          if grep -qE 'src/main\.(tsx|jsx|ts|js)' dist/index.html; then
+            echo "::error::dist/index.html still points at /src — Pages source is probably 'Deploy from branch' or build failed."
+            exit 1
+          fi
 
       - uses: actions/upload-pages-artifact@v3
         if: >-
