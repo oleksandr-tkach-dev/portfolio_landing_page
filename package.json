@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:gh-pages": "VITE_BASE_URL=/portfolio_landing_page/ vite build && node scripts/postbuild-gh-pages.mjs",
+    "build:gh-pages": "VITE_BASE_URL=/ vite build && node scripts/postbuild-gh-pages.mjs",
     "deploy:gh-pages": "npm run build:gh-pages && npx gh-pages -d dist",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",

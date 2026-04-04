@@ -8,8 +8,11 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const baseUrl = import.meta.env.BASE_URL;
 const routerBasename =
-  import.meta.env.BASE_URL === "/" ? undefined : import.meta.env.BASE_URL.replace(/\/$/, "");
+  !baseUrl || baseUrl === "/" || baseUrl === "./"
+    ? undefined
+    : baseUrl.replace(/\/$/, "");
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

@@ -1,13 +1,12 @@
 # GitHub Pages: build on main/master, push ./dist to branch `gh-pages`.
 #
-# Your site URL is a project page under /portfolio_landing_page/, so GitHub Pages must
-# serve the built bundle (hashed JS/CSS), not repo-root index.html.
+# PAGES_BASE must match how GitHub serves the site:
+#   • User/org site (repo username.github.io) → live at https://USER.github.io/ → use / below.
+#   • Project site (repo OTHER) → live at https://USER.github.io/REPO/ → set /REPO/ here.
 #
-# Settings → Pages → Source: Deploy from branch → Branch: gh-pages, folder: / (root).
-# (If Source is "GitHub Actions" instead, either switch to branch deploy as above or
-# remove the peaceiris step and use only upload-pages-artifact + deploy-pages — not both.)
+# Settings → Pages → Deploy from branch → gh-pages, folder / (root).
 #
-# Site: https://oleksandr-tkach-dev.github.io/portfolio_landing_page/
+# Live (user Pages): https://oleksandr-tkach-dev.github.io/
 
 name: Deploy to GitHub Pages
 
@@ -26,7 +25,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  PAGES_BASE: /portfolio_landing_page/
+  PAGES_BASE: /
 
 jobs:
   build-and-deploy:
