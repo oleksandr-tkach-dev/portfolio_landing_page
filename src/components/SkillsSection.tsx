@@ -116,6 +116,7 @@ const techCategories: { title: string; items: string[] }[] = [
       "WorkManager",
       "FCM",
       "Geolocation",
+      "WebRTC",
       "MethodChannel / EventChannel",
       "iOS Shortcuts",
       "Webhooks",

@@ -18,7 +18,7 @@ const contacts = [
     icon: Linkedin,
     label: "LinkedIn",
     value: "linkedin.com/in/oleksandr-tkach",
-    href: "https://www.linkedin.com/in/oleksandr-tkach",
+    href: "https://www.linkedin.com/in/oleksandr-tkach-665308239",
   },
 ];
 
@@ -77,10 +77,9 @@ const ContactSection = () => {
         >
           <div className="text-sm text-muted-foreground leading-relaxed space-y-1.5 max-w-2xl">
             <p className="text-foreground/80 font-medium">Languages:</p>
-            <p>Ukrainian (native).</p>
+            <p>Ukrainian — Native.</p>
             <p>
-              English — comfortable with reading and technical documentation; spoken{" "}
-              <abbr title="Common European Framework of Reference">CEFR</abbr> A2, improving.
+              English — Pre-Intermediate. comfortable with reading and technical documentation;
             </p>
           </div>
           <div className="text-sm text-muted-foreground leading-relaxed space-y-1.5 shrink-0 sm:text-right">

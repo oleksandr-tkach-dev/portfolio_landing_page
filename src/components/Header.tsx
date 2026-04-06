@@ -32,7 +32,7 @@ const Header = () => {
           ))}
         </nav>
         <a
-          href="https://www.linkedin.com/in/oleksandr-tkach"
+          href="https://www.linkedin.com/in/oleksandr-tkach-665308239"
           target="_blank"
           rel="noopener noreferrer"
           className="hidden md:inline-flex text-sm text-primary hover:text-accent transition-colors font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
@@ -71,7 +71,7 @@ const Header = () => {
               </a>
             ))}
             <a
-              href="https://www.linkedin.com/in/oleksandr-tkach"
+              href="https://www.linkedin.com/in/oleksandr-tkach-665308239"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}

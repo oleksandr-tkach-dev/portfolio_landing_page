@@ -42,11 +42,7 @@ const AboutSection = () => {
           transition={{ duration: reduceMotion ? 0 : 0.45, delay: reduceMotion ? 0 : 0.05 }}
           className="text-muted-foreground text-base md:text-lg max-w-3xl leading-relaxed mb-12"
         >
-          I am a <strong className="text-foreground font-medium">fullstack mobile developer</strong> with several years of production
-          experience across mobility and adjacent domains—Flutter apps in live use, integrations with backends and third-party services,
-          and the release discipline that keeps them running reliably. I take ownership of complex features, keep codebases
-          maintainable, and work closely with backend and product on delivery—through clear architecture, solid integrations, and
-          pragmatic execution.
+          I am a <strong className="text-foreground font-medium">full-stack mobile developer</strong> with several years of production experience. I build Flutter apps used by real users, integrate with backends and third-party services, and ensure they run reliably. I take ownership of complex features, keep code maintainable, and work closely with backend and product teams to deliver solutions with clear architecture and solid integrations.
         </motion.p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

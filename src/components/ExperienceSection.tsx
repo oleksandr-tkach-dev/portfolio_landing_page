@@ -9,10 +9,10 @@ const experiences = [
     summary:
       "Dual-product mobility platform: a passenger app for requesting rides and a driver app for accepting and completing trips—connected through live dispatch-style workflows.",
     highlights: [
-      "Owned substantial feature work across both apps while keeping a consistent architectural style (Clean Architecture + BLoC) for long-term maintainability.",
-      "Integrated real-time ride lifecycle updates using Socket.IO alongside REST, with careful attention to connection state and failure modes.",
-      "Delivered native in-app payments with Apple Pay and Google Pay, working through platform configuration and payment-flow edge cases.",
-      "Firebase for authentication and related cloud services; monitoring and releases in line with team practice.",
+      "Led development of real-time ride lifecycle system (Socket.IO + REST) ensuring stable synchronization between client and backend under unstable network conditions",
+      "Implemented in-app payments (Apple Pay / Google Pay), handling edge cases in payment flows and platform configuration",
+      "Owned feature development across two apps, enforcing consistent architecture (Clean Architecture + BLoC)",
+      "Improved app reliability by handling connection state and failure scenarios in real-time features",
     ],
     tech: ["Dart/Flutter", "Clean Architecture", "BLoC", "REST", "Socket.IO", "Firebase", "Google Pay", "Apple Pay"],
   },
@@ -24,10 +24,10 @@ const experiences = [
     summary:
       "Crypto-adjacent product with live reward flows and wallet-oriented withdrawals. Scope included WebSocket-heavy client work, an iOS SMS logging pipeline with native bridges and webhooks, and Android customization on AOSP-oriented builds.",
     highlights: [
-      "WebSocket-driven features for near-real-time updates, aligned with backend expectations and defensive handling of connection and sync edge cases.",
-      "iOS SMS logger: Flutter with MethodChannel into native code; Shortcuts-style automation could call into the app, with local persistence and configurable outbound webhooks and payload shapes.",
-      "Android platform layer: work on AOSP-based images and firmware, plus system UI and framework adjustments when off-the-shelf app APIs were not enough.",
-      "Firebase and third-party APIs (including Telegram) for engagement, notifications, and operational workflows.",
+      "Developed real-time features using WebSockets, ensuring reliable data sync and graceful handling of connection edge cases",
+      "Built iOS SMS logging feature via MethodChannel with native integration and automation triggers",
+      "Worked on Android platform layer (AOSP-based systems), extending system capabilities beyond standard APIs",
+      "Integrated Firebase and third-party APIs (including Telegram) for notifications and operational workflows",
     ],
     tech: [
       "Dart/Flutter",
@@ -49,10 +49,10 @@ const experiences = [
     summary:
       "Early-stage business-card product: scanning, structured local and remote storage, and sharing contact data. Also built a paired-device location tracker on top of the same stack—FCM-triggered wake, background geolocation, and Firebase-backed position history with route playback.",
     highlights: [
-      "Implemented Flutter UI and domain flows with BLoC, growing from feature tasks toward broader module ownership.",
-      "Device tracker: one handset could initiate tracking of another via Firebase Cloud Messaging; on the target device, WorkManager and a background service ran geolocation, wrote positions to Firebase, and the client showed live movement and route history.",
-      "Persisted structured data locally with Sqflite and synchronized concepts with backend contracts (Swagger, Postman).",
-      "Integrated Firebase Authentication and related services to support secure access patterns for a young product.",
+      "Developed UI and domain features using BLoC, growing into ownership of larger modules",
+      "Implemented local data persistence (SQLite) with synchronization to backend APIs",
+      "Built device tracking system with Firebase Cloud Messaging and background services (WorkManager) enabling real-time location sharing",
+      "Integrated Firebase Authentication to provide secure user access, authentication flows, and account management",
     ],
     tech: [
       "Dart/Flutter",
@@ -62,6 +62,7 @@ const experiences = [
       "FCM",
       "WorkManager",
       "Geolocation",
+      "WebRTC",
       "Swagger",
       "Postman",
     ],
@@ -138,7 +139,7 @@ const ExperienceSection = () => {
             <div>
               <h4 className="font-display text-lg font-semibold">Bachelor of Science (in progress)</h4>
               <p className="text-primary text-sm mt-1">Kryvyi Rih State Pedagogical University</p>
-              <p className="text-muted-foreground text-sm mt-2 leading-relaxed">Part-time, alongside full-time engineering work.</p>
+              <h4 className="font-display text-lg font-semibold">Physics & Math Faculty</h4>
             </div>
           </div>
         </motion.div>
